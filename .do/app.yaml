@@ -18,10 +18,21 @@ workers:
     repo: snormore/django-chat
     deploy_on_push: true
     branch: master
-  run_command: ./start-channels-server.sh
+  run_command: ./start-channels-worker.sh
   envs:
   - key: DJANGO_SECRET_KEY
     value: my-secret-key
     type: SECRET
   - key: WORKER_CHANNEL
     value: sms_channel
+databases:
+- name: db
+  production: true
+  cluster_name: django-chat-pg
+  engine: PG
+  version: "12"
+- name: redis
+  production: true
+  cluster_name: django-chat-redis
+  engine: REDIS
+  version: "5"

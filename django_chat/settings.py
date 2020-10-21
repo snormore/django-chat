@@ -2,6 +2,7 @@
 Django settings for the Django Async project.
 """
 import os
+import dj_database_url
 
 from django_chat.apps.bot.apps import BotConfig
 from django_chat.apps.chat.apps import ChatConfig
@@ -79,14 +80,7 @@ ASGI_APPLICATION = "django_chat.routing.application"
 
 # Database
 DATABASES = {
-    "default": {
-        "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": os.getenv("DB_DATABASE", os.path.join(BASE_DIR, "../../db.sqlite3")),
-        "USER": os.environ.get("DB_USER"),
-        "HOST": os.environ.get("DB_HOST"),
-        "PORT": os.environ.get("DB_PORT"),
-        "PASSWORD": os.environ.get("DB_PASSWORD"),
-    }
+	"default": dj_database_url.config() # Parse DB credentials from the DATABASE_URL env
 }
 
 DATABASES["default"]["CONN_MAX_AGE"] = int(os.getenv("DB_CONN_MAX_AGE", 0))  # type: ignore
@@ -131,7 +125,7 @@ STATIC_URL = "/static/"
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {"hosts": [(os.getenv("REDIS_HOST", "redis"), int(os.getenv("REDIS_PORT", "6379")))]},
+        "CONFIG": {"hosts": [os.getenv("REDIS_URL", "redis://redis:6379")]},
     }
 }
 WORKER_CHANNEL_NAME = os.getenv("WORKER_CHANNEL")
