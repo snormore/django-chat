@@ -6,3 +6,22 @@ services:
     repo: snormore/django-chat
     deploy_on_push: true
     branch: master
+  run_command: ./start-application-server.sh
+  envs:
+  - key: DJANGO_SECRET_KEY
+    value: my-secret-key
+    type: SECRET
+workers:
+- name: channels
+  dockerfile_path: Dockerfile
+  github:
+    repo: snormore/django-chat
+    deploy_on_push: true
+    branch: master
+  run_command: ./start-channels-server.sh
+  envs:
+  - key: DJANGO_SECRET_KEY
+    value: my-secret-key
+    type: SECRET
+  - key: WORKER_CHANNEL
+    value: sms_channel
