@@ -1,0 +1,8 @@
+name: django-chat
+services:
+- name: web
+  dockerfile_path: Dockerfile
+  github:
+    repo: snormore/django-chat
+    deploy_on_push: true
+    branch: master
